@@ -1,7 +1,5 @@
 echo "Starting Build"
 . /etc/environment 
-export DB2SERVERIP=34.67.85.2
-export DB2SERVERPORT=50000
 moduleType=''
 
 cd $AGENT_WORKDIR/workspace/$JOB_NAME
