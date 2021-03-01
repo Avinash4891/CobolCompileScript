@@ -1,6 +1,7 @@
 echo "Starting Build"
 #db2dclgn -d BOOKS -t db2admin.EMPLOYEE -l cobol -a replace -n EMP- -c -i
 moduleType=''
+isPgm=false
 
 cd $AGENT_WORKDIR/workspace/$JOB_NAME
 
@@ -36,6 +37,27 @@ setModuleType () {
     fi
 }
 
+setModuleType () {
+
+    count=`grep "PROCEDURE DIVISION" $file | awk '$1 !~ /[*]/' | awk '$3 == "USING"' | wc -l`
+    if [ $count != 0 ]
+    then
+    moduleType='m'
+    else
+    moduleType='x'
+    fi
+}
+
+isProgram () {
+      count=`grep "PROCEDURE DIVISION" $file | awk '$1 !~ /[*]/' | wc -l`
+    if [ $count != 0 ]
+    then
+    return true
+    else
+    return false
+    fi
+}
+
 
 
 for file in ./*; 
@@ -54,6 +76,10 @@ for file in ./*;
      
       case "$extension" in
    		"sqb") #It is a cobol db2 program -> precompile, bind, and compile 
+            if(isProgram == true)
+            then
+            echo "AAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+            fi
             db2 prep $file BINDFILE TARGET ANSI_COBOL ;
             mv ./"$filename".bnd ./dbrm
             mv ./"$filename".cbl ./precomp
