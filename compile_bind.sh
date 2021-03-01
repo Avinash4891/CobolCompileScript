@@ -1,5 +1,4 @@
 echo "Starting Build"
-. /etc/environment 
 moduleType=''
 
 cd $AGENT_WORKDIR/workspace/$JOB_NAME
