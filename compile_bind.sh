@@ -78,24 +78,28 @@ for file in ./*;
    		"sqb") #It is a cobol db2 program -> precompile, bind, and compile 
             if(isProgram == 0)
             then
-            echo "AAAAAAAAAAAAAAAAAAAAAAAAAAAA"
-            fi
-            db2 prep $file BINDFILE TARGET ANSI_COBOL ;
-            mv ./"$filename".bnd ./dbrm
-            mv ./"$filename".cbl ./precomp
-            db2 bind ./dbrm/"$filename".bnd;
+              db2 prep $file BINDFILE TARGET ANSI_COBOL ;
+              mv ./"$filename".bnd ./dbrm
+              mv ./"$filename".cbl ./precomp
+              db2 bind ./dbrm/"$filename".bnd;
 
-            setModuleType
-            cobc -$moduleType -std=ibm -o ./load/"$filename" ./precomp/"$filename".cbl -fnot-reserved=TITLE -I"/opt/ibm/db2/V11.5/include/cobol_mf" -L"/opt/ibm/db2/V11.5/lib64" -ldb2     
-   			
+              setModuleType
+              cobc -$moduleType -std=ibm -o ./load/"$filename" ./precomp/"$filename".cbl -fnot-reserved=TITLE -I"/opt/ibm/db2/V11.5/include/cobol_mf" -L"/opt/ibm/db2/V11.5/lib64" -ldb2     
+   			    fi
         ;;
    		"cbl") 
-            setModuleType
-        	cobc -$moduleType -std=ibm -o ./load/"$filename" ./$file
+            if(isProgram == 0)
+            then
+              setModuleType
+        	    cobc -$moduleType -std=ibm -o ./load/"$filename" ./$file
+            fi
    		;;
    		"cob") 
-        	setModuleType
-        	cobc -$moduleType -std=ibm -o ./load/"$filename" ./$file
+            if(isProgram == 0)
+            then
+        	    setModuleType
+        	    cobc -$moduleType -std=ibm -o ./load/"$filename" ./$file
+            fi
    		;;
 	esac
     
