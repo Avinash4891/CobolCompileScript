@@ -49,6 +49,7 @@ for file in ./*;
     
 
      echo "$filename"  ":"  "$extension"
+     echo `grep "PROCEDURE DIVISION" $file | awk '$1 !~ /[*]/' | awk '$3 == "USING"' | wc -l`
      
       case "$extension" in
    		"sqb") #It is a cobol db2 program -> precompile, bind, and compile 
@@ -63,11 +64,11 @@ for file in ./*;
         ;;
    		"cbl") 
             setModuleType
-        	cobc -$moduleType -std=ibm -o ./load/"$filename"
+        	cobc -$moduleType -std=ibm -o ./load/"$filename" ./$file
    		;;
    		"cob") 
         	setModuleType
-        	cobc -$moduleType -std=ibm -o ./load/"$filename" 
+        	cobc -$moduleType -std=ibm -o ./load/"$filename" ./$file
    		;;
 	esac
     
