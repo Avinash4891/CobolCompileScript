@@ -49,6 +49,7 @@ for file in ./*;
     
 
      echo "$filename"  ":"  "$extension"
+     echo `grep "PROCEDURE DIVISION" $file | awk '$1 !~ /[*]/'`
      echo `grep "PROCEDURE DIVISION" $file | awk '$1 !~ /[*]/' | awk '$3 == "USING"' | wc -l`
      
       case "$extension" in
