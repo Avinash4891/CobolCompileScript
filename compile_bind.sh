@@ -42,9 +42,9 @@ setModuleType () {
     count=`grep "PROCEDURE DIVISION" $file | awk '$1 !~ /[*]/' | awk '$3 == "USING"' | wc -l`
     if [ $count != 0 ]
     then
-    moduleType='m'
+    return 0
     else
-    moduleType='x'
+    return 1
     fi
 }
 
@@ -81,8 +81,8 @@ for file in ./*;
               mv ./"$filename".cbl ./precomp
               db2 bind ./dbrm/"$filename".bnd;
 
-              setModuleType
-              if(moduleType == 'm')
+              
+              if(setModuleType == 0)
               then
                 cobc -m -std=ibm -o ./load/"$filename".so ./precomp/"$filename".cbl -fnot-reserved=TITLE -I"/opt/ibm/db2/V11.5/include/cobol_mf" -L"/opt/ibm/db2/V11.5/lib64" -ldb2     
               else
@@ -93,8 +93,8 @@ for file in ./*;
    		"cbl") 
             if(isProgram == 0)
             then
-              setModuleType
-              if(moduleType == 'm')
+             
+              if(setModuleType == 0)
               then
         	    cobc -m -std=ibm -o ./load/"$filename".so ./$file
               else
@@ -106,8 +106,8 @@ for file in ./*;
    		"cob") 
             if(isProgram == 0)
             then
-        	    setModuleType
-              if(moduleType == 'm')
+        	   
+              if(setModuleType == 0)
               then
         	    cobc -m -std=ibm -o ./load/"$filename".so ./$file
               else
