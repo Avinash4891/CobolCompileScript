@@ -82,21 +82,37 @@ for file in ./*;
               db2 bind ./dbrm/"$filename".bnd;
 
               setModuleType
-              cobc -$moduleType -std=ibm -o ./load/"$filename" ./precomp/"$filename".cbl -fnot-reserved=TITLE -I"/opt/ibm/db2/V11.5/include/cobol_mf" -L"/opt/ibm/db2/V11.5/lib64" -ldb2     
+              if(moduleType == 'm')
+              then
+                cobc -m -std=ibm -o ./load/"$filename".so ./precomp/"$filename".cbl -fnot-reserved=TITLE -I"/opt/ibm/db2/V11.5/include/cobol_mf" -L"/opt/ibm/db2/V11.5/lib64" -ldb2     
+              else
+                cobc -x -std=ibm -o ./load/"$filename" ./precomp/"$filename".cbl -fnot-reserved=TITLE -I"/opt/ibm/db2/V11.5/include/cobol_mf" -L"/opt/ibm/db2/V11.5/lib64" -ldb2     
+              fi
    			    fi
         ;;
    		"cbl") 
             if(isProgram == 0)
             then
               setModuleType
-        	    cobc -$moduleType -std=ibm -o ./load/"$filename" ./$file
+              if(moduleType == 'm')
+              then
+        	    cobc -m -std=ibm -o ./load/"$filename".so ./$file
+              else
+              cobc -x -std=ibm -o ./load/"$filename" ./$file
+              fi
+
             fi
    		;;
    		"cob") 
             if(isProgram == 0)
             then
         	    setModuleType
-        	    cobc -$moduleType -std=ibm -o ./load/"$filename" ./$file
+              if(moduleType == 'm')
+              then
+        	    cobc -m -std=ibm -o ./load/"$filename".so ./$file
+              else
+              cobc -x -std=ibm -o ./load/"$filename" ./$file
+              fi
             fi
    		;;
 	esac
