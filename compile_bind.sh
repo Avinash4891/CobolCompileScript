@@ -1,7 +1,5 @@
 echo "Starting Build"
-. /etc/environment 
-export DB2SERVERIP=34.67.85.2
-export DB2SERVERPORT=50000
+#db2dclgn -d BOOKS -t db2admin.EMPLOYEE -l cobol -a replace -n EMP- -c -i
 moduleType=''
 
 cd $AGENT_WORKDIR/workspace/$JOB_NAME
@@ -19,9 +17,9 @@ echo "DB2 Connection required | Attempting connection to $DB2SERVERIP:$DB2SERVER
 #db2 UNCATALOG NODE tcpnode 
 #db2 UNCATALOG DB TESTDB 
 db2 CATALOG TCPIP NODE tcpnode REMOTE $DB2SERVERIP SERVER $DB2SERVERPORT REMOTE_INSTANCE DB2INST1
-db2 CATALOG DB TESTDB AT NODE tcpnode AUTHENTICATION SERVER
+db2 CATALOG DB $DBNAME AT NODE tcpnode AUTHENTICATION SERVER
 db2 TERMINATE
-db2 CONNECT TO TESTDB USER $USER USING $PASSWORD;
+db2 CONNECT TO $DBNAME USER $USER USING $PASSWORD;
 mkdir ./dbrm
 mkdir ./precomp
 
@@ -61,7 +59,7 @@ for file in ./*;
 
             setModuleType
             cobc -$moduleType -std=ibm -o ./load/"$filename" ./precomp/"$filename".cbl -fnot-reserved=TITLE -I"/opt/ibm/db2/V11.5/include/cobol_mf" -L"/opt/ibm/db2/V11.5/lib64" -ldb2     
-   			./load/"$filename"
+   			
         ;;
    		"cbl") 
             setModuleType
