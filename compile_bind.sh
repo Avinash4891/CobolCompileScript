@@ -52,9 +52,9 @@ isProgram () {
       count=`grep "PROCEDURE DIVISION" $file | awk '$1 !~ /[*]/' | wc -l`
     if [ $count != 0 ]
     then
-    return true
+    return 0
     else
-    return false
+    return 1
     fi
 }
 
@@ -76,7 +76,7 @@ for file in ./*;
      
       case "$extension" in
    		"sqb") #It is a cobol db2 program -> precompile, bind, and compile 
-            if(isProgram == true)
+            if(isProgram == 0)
             then
             echo "AAAAAAAAAAAAAAAAAAAAAAAAAAAA"
             fi
